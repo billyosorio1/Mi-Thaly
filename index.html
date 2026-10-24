@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -281,7 +280,7 @@ h1 {
 
 .reminder-text {
     display: none;
-    max-width: 430px;
+    max-width: 490px;
     margin: 22px auto;
     padding: 0 8px;
     color: #555;
@@ -292,6 +291,39 @@ h1 {
 .reminder-text.visible {
     display: block;
     animation: appear .4s ease both;
+}
+
+.reminder-heading {
+    color: #777;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    margin-bottom: 13px;
+}
+
+.reminder-message {
+    font-size: 16px;
+    line-height: 1.95;
+    white-space: pre-line;
+}
+
+.reminder-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 20px auto 0;
+}
+
+.reminder-navigation button {
+    padding: 9px 14px;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.reminder-counter {
+    color: #888;
+    font-size: 12px;
+    white-space: nowrap;
 }
 
 /* CORAZONES FLOTANTES */
@@ -392,6 +424,15 @@ h1 {
     .reminders button {
         font-size: 12px;
         padding: 10px 12px;
+    }
+
+    .reminder-message {
+        font-size: 15px;
+    }
+
+    .reminder-navigation button {
+        font-size: 11px;
+        padding: 9px 11px;
     }
 }
 
@@ -596,41 +637,51 @@ h1 {
 
     <div class="reminders">
 
-        <button
-            type="button"
-            data-message="No tenés que resolver toda tu vida hoy. Respirá y andá pasito a pasito. Un momento difícil es solo una parte de tu día, no todo lo que sos."
-        >
+        <button type="button" data-section="peso">
             Si todo pesa mucho
         </button>
 
-        <button
-            type="button"
-            data-message="Sos mucho más capaz de lo que a veces creés. No necesitás tener todas las respuestas ni hacerlo todo perfecto. Podés aprender, descansar y volver a intentarlo."
-        >
+        <button type="button" data-section="dudas">
             Si dudás de TI
         </button>
 
-        <button
-            type="button"
-            data-message="Tu valor no depende de la opinión de nadie ni de cuánto logrés hoy. Sos importante tal y como sos, incluso en tus días más sencillos y silenciosos."
-        >
+        <button type="button" data-section="valor">
             Si olvidás lo que valés
         </button>
 
-        <button
-            type="button"
-            data-message="No tenés que cargar con todo en silencio. Podés hablar con alguien de confianza. Merecés apoyo, cariño y compañía también."
-        >
+        <button type="button" data-section="sola">
             Si te sentís solita
+        </button>
+
+        <button type="button" data-section="siento">
+            Lo que siento ♡
         </button>
 
     </div>
 
-    <p
+    <section
         class="reminder-text"
         id="reminderText"
         aria-live="polite"
-    ></p>
+        aria-atomic="true"
+    >
+        <p class="reminder-heading" id="reminderHeading"></p>
+        <p class="reminder-message" id="reminderMessage"></p>
+
+        <div class="reminder-navigation">
+            <button type="button" id="previousMessage" aria-label="Mensaje anterior">
+                ← Anterior
+            </button>
+
+            <span class="reminder-counter" id="reminderCounter">
+                Mensajito 1 de 5
+            </span>
+
+            <button type="button" id="nextMessage" aria-label="Mensaje siguiente">
+                Siguiente →
+            </button>
+        </div>
+    </section>
 
     <!-- CIERRE -->
 
@@ -660,10 +711,8 @@ const musica = document.getElementById("musicaFondo");
 
 enterButton.addEventListener("click", async () => {
 
-    // Evitar múltiples clics mientras comienza la música.
     enterButton.disabled = true;
 
-    // Intentar iniciar la canción al tocar el botón.
     try {
         musica.volume = 0.45;
         await musica.play();
@@ -674,12 +723,10 @@ enterButton.addEventListener("click", async () => {
             error
         );
 
-        // Permitir volver a intentarlo si la reproducción falla.
         enterButton.disabled = false;
         return;
     }
 
-    // Ocultar la pantalla de bienvenida.
     welcomeScreen.classList.add("hidden");
 
     setTimeout(() => {
@@ -720,17 +767,116 @@ openButton.addEventListener("click", () => {
 
 
 /* =====================================
-   MOSTRAR LOS RECORDATORIOS
+   RECORDATORIOS: 5 MENSAJES POR BOTÓN
+===================================== */
+
+const reminderMessages = {
+
+    peso: {
+        heading: "SI TODO PESA MUCHO ♡",
+        texts: [
+            "Thaly, no tenés que poder con todo al mismo tiempo. También está bien descansar, respirar y darte un ratito para vos. No tenés que demostrarle a nadie que podés con todo.",
+            "No tenés que resolver toda tu vida hoy, mi niña. Un día a la vez, ¿sí? Por ahora, hacé lo que podás y tratate con cariño. Lo demás puede esperar un poquito. ♡",
+            "Aunque hoy las cosas parezcan demasiado, eso no significa que siempre se van a sentir así. No tenés que encontrar todas las respuestas ahorita; podés ir pasito a pasito.",
+            "Ojalá pudieras verte como yo te veo y recordar que no tenés que ser fuerte a cada segundo. También merecés que te cuiden, que te escuchen y que te den un poquito de paz.",
+            "Date permiso de parar un poquito, mi niña. Descansar no es fallar, llorar no te hace débil y pedir ayuda no te hace menos capaz. No tenés que cargar con todo vos solita. ♡"
+        ]
+    },
+
+    dudas: {
+        heading: "SI DUDÁS DE VOS ♡",
+        texts: [
+            "Si algún día dudás de vos, ojalá pudieras mirarte a través de mis ojos, porque yo veo muchísimas cosas bonitas en vos, incluso esas que a veces te cuesta reconocer.",
+            "Sos capaz de más cosas de las que imaginás, incluso cuando vos misma no lo creás. No necesitás tenerlo todo claro para seguir aprendiendo y creciendo.",
+            "No necesitás tener todo resuelto para estar haciendo las cosas bien. A veces avanzar también significa descansar, volver a intentarlo o pedir que alguien te acompañe.",
+            "Equivocarte no te hace menos capaz, mi niña. Todos tenemos cosas que aprender y eso no cambia lo valiosa que sos ni todo lo que podés llegar a hacer.",
+            "Ojalá nunca dejés que un mal día te haga dudar de todo lo bonito que hay en vos. Un momento difícil no borra tus esfuerzos, tus logros ni la persona increíble que sos. ♡"
+        ]
+    },
+
+    valor: {
+        heading: "SI OLVIDÁS LO QUE VALÉS ♡",
+        texts: [
+            "Nunca olvidés el inmenso valor que tenés, incluso en esos días en los que te cueste reconocerlo. Seguís siendo vos, una niña increíble, también cuando no te sentís en tu mejor momento.",
+            "No tenés que demostrarle nada a nadie para merecer cariño, respeto y cosas bonitas. Merecés que te traten bien simplemente porque sos una persona que vale muchísimo.",
+            "Hay cosas de vos que quizá todavía no lográs ver, pero eso no significa que no estén ahí. Tu corazón, tu forma de sentir y todas esas pequeñas cosas tuyas tienen muchísimo valor.",
+            "Sos mucho más que tus errores, tus inseguridades y esos días en los que no te sentís suficiente. No te definás por un momento complicado ni por una opinión que te hizo daño.",
+            "No dejés que la forma en la que alguien te trate te haga olvidar todo lo que valés. Merecés cariño sincero, respeto y personas con quienes podás sentirte segura siendo vos misma. ♡"
+        ]
+    },
+
+    sola: {
+        heading: "SI TE SENTÍS SOLITA ♡",
+        texts: [
+            "Aunque a veces sintás que nadie te entiende, tus sentimientos importan y merecen ser escuchados. No tenés que encontrar las palabras perfectas para explicar lo que te pasa.",
+            "Si hoy necesitás que alguien te escuche, no tenés que fingir que todo está bien. Podés decir que estás cansada, que algo te duele o que simplemente necesitás compañía.",
+            "Ojalá recordés que no tenés que pasar por todos tus días difíciles sin compañía. Apoyarte en alguien de confianza también es una forma de cuidarte.",
+            "Si hoy no tenés ganas de hablar mucho, está bien. No tenés que entretener a nadie ni aparentar estar feliz. Merecés espacios donde podás ser vos, incluso en silencio.",
+            "Y si hoy el día se siente un poquito más solitario, espero que estas palabras te hagan sentir acompañada. Deseo que encontrés un ratito de tranquilidad y recordés que merecés mucho cariño. ♡"
+        ]
+    },
+
+    siento: {
+        heading: "LO QUE SIENTO ♡",
+        texts: [
+            "Thaly, quiero que nunca olvidés la niña tan increíble que sos. A veces siento que ni vos misma te das cuenta de lo bonita que es tu forma de ser, de todo lo que llevás dentro y de lo mucho que valés. Tu corazón vale muchísimo más de lo que imaginás y ojalá pudieras verlo aunque fuera por un ratito como yo lo veo. No tenés que ser perfecta para ser alguien maravillosa, porque hay muchísimas cosas bonitas en vos que no cambiaría por nada. ♡",
+
+            "¿Sabés algo que me encanta de vos? Tu sonrisa. No sé si te das cuenta, pero tenés esa manera tan tuya de hacer que las cosas se sientan más bonitas. Tu sonrisa ilumina mucho más de lo que imaginás y me gustaría que nunca sintieras que tenés que esconderla. Quiero verte feliz, haciendo las cosas que te gustan, riéndote por cualquier tontería y siendo vos misma. Sos hermosa, mi niña, pero hay algo todavía más bonito en vos: todo eso que llevás en el corazón. ♡",
+
+            "Quiero que sepás que no solamente quiero estar cuando estés feliz y todo te salga bien. También quiero estar cuando estés estresada, cuando tengás un mal rato, cuando tu humor cambie de repente o cuando simplemente no tengás ganas de hablar con nadie. No espero que estés bien todo el tiempo ni que escondás lo que sentís para que todo sea más fácil. Quiero aprender a entenderte, escucharte y acompañarte. Tus días difíciles no hacen que valgas menos ni que merezcás menos cariño. ♡",
+
+            "Si algún día sentís que todo se te viene encima, quiero ser alguien con quien podás hablar sin miedo a que te juzguen. Si hay un problema, quiero escucharte y buscar una solución con vos, aunque tengamos que pensar las cosas muchas veces. Y si no existe una solución inmediata, por lo menos quiero acompañarte mientras encontramos la manera de seguir. No siempre voy a tener las palabras perfectas, pero sí quiero esforzarme por entenderte y que no sintás que tenés que resolverlo todo sola. ♡",
+
+            "Mi niña, para mí no tenés que convertirte en alguien diferente para ser suficiente. No tenés que esconder tus inseguridades, tus lágrimas, tus días sensibles ni esas partes de vos que a veces te cuesta aceptar. Quiero conocerte de verdad, con tus días bonitos y también con los que cuestan un poquito más. Si alguna vez dudás de vos, quiero recordarte todas las veces que sea necesario lo increíble que sos. Sos hermosa tal y como sos, Thaly, y espero que algún día podás mirarte con la misma ternura con la que yo te miro. ♡"
+        ]
+    }
+
+};
+
+
+/* =====================================
+   MOSTRAR Y CAMBIAR MENSAJES
 ===================================== */
 
 const reminderText = document.getElementById("reminderText");
+const reminderHeading = document.getElementById("reminderHeading");
+const reminderMessage = document.getElementById("reminderMessage");
+const reminderCounter = document.getElementById("reminderCounter");
+const previousMessage = document.getElementById("previousMessage");
+const nextMessage = document.getElementById("nextMessage");
 
-document.querySelectorAll("[data-message]").forEach(button => {
+let currentReminder = null;
+let currentMessageIndex = 0;
+
+function showReminderMessage() {
+
+    const reminder = reminderMessages[currentReminder];
+
+    reminderHeading.textContent = reminder.heading;
+    reminderMessage.textContent = reminder.texts[currentMessageIndex];
+
+    reminderCounter.textContent =
+        `Mensajito ${currentMessageIndex + 1} de ${reminder.texts.length}`;
+
+}
+
+document.querySelectorAll("[data-section]").forEach(button => {
 
     button.addEventListener("click", () => {
 
-        reminderText.textContent = button.dataset.message;
+        currentReminder = button.dataset.section;
+
+        // Elegir un mensaje aleatorio al abrir cada apartado.
+        currentMessageIndex = Math.floor(
+            Math.random() *
+            reminderMessages[currentReminder].texts.length
+        );
+
+        reminderText.classList.remove("visible");
+        void reminderText.offsetWidth;
         reminderText.classList.add("visible");
+
+        showReminderMessage();
 
         reminderText.scrollIntoView({
             behavior: "smooth",
@@ -738,6 +884,38 @@ document.querySelectorAll("[data-message]").forEach(button => {
         });
 
     });
+
+});
+
+
+/* MENSAJE ANTERIOR */
+
+previousMessage.addEventListener("click", () => {
+
+    if (!currentReminder) return;
+
+    const total = reminderMessages[currentReminder].texts.length;
+
+    currentMessageIndex =
+        (currentMessageIndex - 1 + total) % total;
+
+    showReminderMessage();
+
+});
+
+
+/* MENSAJE SIGUIENTE */
+
+nextMessage.addEventListener("click", () => {
+
+    if (!currentReminder) return;
+
+    const total = reminderMessages[currentReminder].texts.length;
+
+    currentMessageIndex =
+        (currentMessageIndex + 1) % total;
+
+    showReminderMessage();
 
 });
 
