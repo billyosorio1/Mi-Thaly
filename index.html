@@ -326,6 +326,157 @@ h1 {
     white-space: nowrap;
 }
 
+/* APARTADO ESPECIAL: SUEÑOS */
+
+.dreams-wrap {
+    max-width: 490px;
+    margin: 28px auto 12px;
+}
+
+.dreams-open {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding: 17px 20px;
+    border: 1px solid #ead9df;
+    border-radius: 24px;
+    background: linear-gradient(
+        135deg,
+        #fff 0%,
+        #fff8fa 48%,
+        #f8eef2 100%
+    );
+    color: #66535a;
+    box-shadow: 0 8px 25px rgba(190, 155, 168, .12);
+}
+
+.dreams-open::before {
+    content: "✧";
+    position: absolute;
+    top: 8px;
+    right: 18px;
+    color: #c6aab5;
+    font-size: 24px;
+    animation: twinkle 3s ease-in-out infinite;
+}
+
+.dreams-open .dreams-label {
+    display: block;
+    margin-bottom: 5px;
+    color: #a58a95;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.dreams-open strong {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.dreams-panel {
+    display: none;
+    position: relative;
+    overflow: hidden;
+    margin-top: 16px;
+    padding: 30px 22px 25px;
+    border: 1px solid rgba(222, 195, 207, .8);
+    border-radius: 28px;
+    background:
+        radial-gradient(
+            ellipse at 8% 8%,
+            rgba(255,255,255,.98) 0%,
+            rgba(255,255,255,0) 34%
+        ),
+        radial-gradient(
+            ellipse at 95% 92%,
+            rgba(242,220,229,.78) 0%,
+            rgba(242,220,229,0) 38%
+        ),
+        linear-gradient(
+            145deg,
+            #fffdfd 0%,
+            #fff7fa 52%,
+            #f9edf2 100%
+        );
+    box-shadow: 0 15px 38px rgba(188, 151, 165, .16);
+    text-align: center;
+}
+
+.dreams-panel.visible {
+    display: block;
+    animation: dreamsAppear .75s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.dreams-panel::before,
+.dreams-panel::after {
+    content: "✧";
+    position: absolute;
+    color: #c6aab5;
+    font-size: 22px;
+    animation: twinkle 3.5s ease-in-out infinite;
+}
+
+.dreams-panel::before {
+    top: 17px;
+    left: 18px;
+}
+
+.dreams-panel::after {
+    right: 19px;
+    bottom: 15px;
+    animation-delay: 1s;
+}
+
+.dreams-eyebrow {
+    color: #a58a95;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    margin-bottom: 11px;
+}
+
+.dreams-title {
+    color: #705a63;
+    font-family: "Yu Mincho", "Hiragino Mincho ProN",
+                 "Noto Serif JP", serif;
+    font-size: clamp(1.65rem, 6vw, 2.15rem);
+    font-weight: 400;
+    line-height: 1.4;
+    margin-bottom: 18px;
+}
+
+.dreams-heart {
+    display: block;
+    color: #c9aab7;
+    font-size: 21px;
+    margin-bottom: 18px;
+}
+
+.dreams-message {
+    color: #62565a;
+    font-size: 15px;
+    line-height: 2;
+    white-space: pre-line;
+}
+
+.dreams-close {
+    margin-top: 23px;
+    background: rgba(255,255,255,.78);
+    border-color: #e7d4dc;
+    color: #78616b;
+}
+
+@keyframes dreamsAppear {
+    from {
+        opacity: 0;
+        transform: translateY(18px) scale(.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
 /* CORAZONES FLOTANTES */
 
 .floating-hearts {
@@ -434,6 +585,15 @@ h1 {
         font-size: 11px;
         padding: 9px 11px;
     }
+
+    .dreams-panel {
+        padding: 27px 18px 24px;
+    }
+
+    .dreams-message {
+        font-size: 14px;
+        line-height: 1.95;
+    }
 }
 
 /* ACCESIBILIDAD */
@@ -492,7 +652,7 @@ h1 {
     </button>
 
     <p class="welcome-footer">
-        Preparé esto pensando en Ti 👉🏽👈🏽
+        Preparé esto pensando en ti 👉🏽👈🏽
     </p>
 </section>
 
@@ -536,7 +696,7 @@ h1 {
     <h1>Thaly ♡</h1>
 
     <p class="subtitle">
-        UN LUGARCITO PARA VOS
+        UN LUGARCITO PARA TI
     </p>
 
     <!-- IMAGEN: GUARDAR COMO snoopy.png -->
@@ -550,8 +710,8 @@ h1 {
     </div>
 
     <p class="intro">
-        Si hoy no está siendo un buen día, quedate un ratito aquí.
-        No tenés que resolverlo todo ahorita. 🤍
+        Si hoy no está siendo un buen día, quédate un ratito aquí.
+        No tienes que resolverlo todo ahorita. 🤍
     </p>
 
     <button
@@ -568,57 +728,57 @@ h1 {
     <section class="letter" id="letter" aria-live="polite">
 
         <p>
-            Mi Thaly, si llegaste aquí porque hoy te sentís triste,
+            Mi Thaly, si llegaste aquí porque hoy te sientes triste,
             cansada o porque las cosas no están saliendo como
-            quisieras, quiero que te tomés un momentito para respirar.
+            quisieras, quiero que te tomes un momentito para respirar.
         </p>
 
         <p>
-            No tenés que poder con todo siempre. Está bien tener
+            No tienes que poder con todo siempre. Está bien tener
             días difíciles, llorar, descansar o no saber qué hacer.
-            Eso no te hace menos fuerte; sos humana y también
-            merecés tratarte con cariño.
+            Eso no te hace menos fuerte; eres humana y también
+            mereces tratarte con cariño.
         </p>
 
         <p class="emphasis">
-            Quiero que recordés que sos fuerte y valiente,
-            incluso cuando vos no lo sintás así.
+            Quiero que recuerdes que eres fuerte y valiente,
+            incluso cuando tú no lo sientas así.
             Tu valor no desaparece en los días en los que
             te cuesta más.
         </p>
 
         <p>
-            Valés muchísimo, Thaly. No por lo que hacés por los
+            Vales muchísimo, Thaly. No por lo que haces por los
             demás, por lo bien que te salgan las cosas ni por
-            tener siempre una sonrisa. Valés por quien sos,
-            así, tal y como sos. Ojalá pudieras verte con un
-            poquito de todo lo bonito que yo veo en Ti
+            tener siempre una sonrisa. Vales por quien eres,
+            así, tal y como eres. Ojalá pudieras verte con un
+            poquito de todo lo bonito que yo veo en ti. ♡
         </p>
 
         <p>
             No sé si hoy puedo arreglar lo que te preocupa,
-            pero sí quiero que sepás que no tenés que fingir
-            conmigo. Si querés hablar, te escucho; si necesitás
-            distraerte o simplemente compañía, también podés
+            pero sí quiero que sepas que no tienes que fingir
+            conmigo. Si quieres hablar, te escucho; si necesitas
+            distraerte o simplemente compañía, también puedes
             contar conmigo.
         </p>
 
         <p>
-            Mientras vos me lo permitás, voy a tratar de estar
-            para vos, en los días bonitos y también en los que
+            Mientras me lo permitas, voy a tratar de estar
+            para ti, en los días bonitos y también en los que
             se sienten cuesta arriba. Te quiero muchísimo y
             deseo de verdad que, poquito a poquito, las cosas
             se vayan sintiendo mejor.
         </p>
 
         <p>
-            Merecés cosas bonitas, merecés que te quieran bien
-            y merecés darte la misma paciencia que tantas veces
-            tenés con los demás.
+            Mereces cosas bonitas, mereces que te quieran bien
+            y mereces darte la misma paciencia que tantas veces
+            tienes con los demás.
         </p>
 
         <div class="signature">
-            Respirá, mi Thaly. Un día difícil no define toda tu historia.
+            Respira, mi Thaly. Un día difícil no define toda tu historia.
             <br>
             Te quiero mucho. ♡
         </div>
@@ -632,7 +792,7 @@ h1 {
     </div>
 
     <p class="small">
-        Si necesitás otro recordatorio, elegí el que más te haga falta hoy.
+        Si necesitas otro recordatorio, elige el que más te haga falta hoy.
     </p>
 
     <div class="reminders">
@@ -642,15 +802,15 @@ h1 {
         </button>
 
         <button type="button" data-section="dudas">
-            Si dudás de TI
+            Si dudas de ti
         </button>
 
         <button type="button" data-section="valor">
-            Si olvidás lo que valés
+            Si olvidas lo que vales
         </button>
 
         <button type="button" data-section="sola">
-            Si te sentís solita
+            Si te sientes solita
         </button>
 
         <button type="button" data-section="siento">
@@ -669,7 +829,12 @@ h1 {
         <p class="reminder-message" id="reminderMessage"></p>
 
         <div class="reminder-navigation">
-            <button type="button" id="previousMessage" aria-label="Mensaje anterior">
+
+            <button
+                type="button"
+                id="previousMessage"
+                aria-label="Mensaje anterior"
+            >
                 ← Anterior
             </button>
 
@@ -677,10 +842,80 @@ h1 {
                 Mensajito 1 de 5
             </span>
 
-            <button type="button" id="nextMessage" aria-label="Mensaje siguiente">
+            <button
+                type="button"
+                id="nextMessage"
+                aria-label="Mensaje siguiente"
+            >
                 Siguiente →
             </button>
+
         </div>
+    </section>
+
+    <!-- APARTADO ESPECIAL PARA SUS SUEÑOS -->
+
+    <div class="divider">
+        <span class="sparkle">✧</span>
+    </div>
+
+    <p class="small">
+        Y hay algo más que quiero decirte sobre todo lo bonito que te espera. ♡
+    </p>
+
+    <section class="dreams-wrap">
+
+        <button
+            class="dreams-open"
+            id="openDreams"
+            type="button"
+            aria-expanded="false"
+            aria-controls="dreamsPanel"
+        >
+            <span class="dreams-label">
+                UNA CARTITA SOLO PARA TI
+            </span>
+
+            <strong>
+                Para todos tus sueños, Thaly ♡
+            </strong>
+        </button>
+
+        <div class="dreams-panel" id="dreamsPanel" aria-live="polite">
+
+            <p class="dreams-eyebrow">
+                PARA TODO LO QUE SUEÑAS
+            </p>
+
+            <h2 class="dreams-title">
+                Para todos tus sueños,<br>
+                Thaly ♡
+            </h2>
+
+            <span class="dreams-heart">
+                ✧ ♡ ✧
+            </span>
+
+            <p class="dreams-message" id="dreamsMessage">
+Y cuando sientas que el mundo se te viene encima, recuerda que no estás sola y que estoy demasiado orgulloso de ti, de la gran persona, hija, hermana, estudiante y futura doctora que eres.
+
+Estoy contento de todo lo que has logrado y de todo lo que sé que todavía te falta por vivir. Quiero verte cumplir tus sueños, verte superar cada obstáculo y verte llegar a lugares que quizás hoy solo imaginas.
+
+Quiero celebrar tus logros, acompañarte en los días difíciles y recordarte lo capaz que eres cuando tú misma lo olvides.
+
+Soy tu fan número 1, mi Thaly, y siempre voy a querer verte salir adelante, apoyarte en cada paso y estar para ti mientras me lo permitas, en las buenas y en las malas. 🫶🏽
+            </p>
+
+            <button
+                class="dreams-close"
+                id="closeDreams"
+                type="button"
+            >
+                Guardar esta cartita ♡
+            </button>
+
+        </div>
+
     </section>
 
     <!-- CIERRE -->
@@ -690,11 +925,11 @@ h1 {
     </div>
 
     <p class="small">
-        Volvé cuando lo necesités, ¿sí?
+        Vuelve cuando lo necesites, ¿sí?
     </p>
 
     <p class="small">
-        Con mucho cariño, de yo para Tú ♡
+        Con mucho cariño, de mí para ti ♡
     </p>
 
 </main>
@@ -717,9 +952,10 @@ enterButton.addEventListener("click", async () => {
         musica.volume = 0.45;
         await musica.play();
     } catch (error) {
+
         console.warn(
             "No se pudo reproducir la canción. " +
-            "Comprobá que cancion.mp3 esté en la carpeta correcta.",
+            "Comprueba que cancion.mp3 esté en la carpeta correcta.",
             error
         );
 
@@ -775,59 +1011,75 @@ const reminderMessages = {
     peso: {
         heading: "SI TODO PESA MUCHO ♡",
         texts: [
-            "Thaly, no tenés que poder con todo al mismo tiempo. También está bien descansar, respirar y darte un ratito para vos. No tenés que demostrarle a nadie que podés con todo.",
-            "No tenés que resolver toda tu vida hoy, mi niña. Un día a la vez, ¿sí? Por ahora, hacé lo que podás y tratate con cariño. Lo demás puede esperar un poquito. ♡",
-            "Aunque hoy las cosas parezcan demasiado, eso no significa que siempre se van a sentir así. No tenés que encontrar todas las respuestas ahorita; podés ir pasito a pasito.",
-            "Ojalá pudieras verte como yo te veo y recordar que no tenés que ser fuerte a cada segundo. También merecés que te cuiden, que te escuchen y que te den un poquito de paz.",
-            "Date permiso de parar un poquito, mi niña. Descansar no es fallar, llorar no te hace débil y pedir ayuda no te hace menos capaz. No tenés que cargar con todo vos solita. ♡"
+            "Thaly, no tienes que poder con todo al mismo tiempo. También está bien descansar, respirar y darte un ratito para ti. No tienes que demostrarle a nadie que puedes con todo.",
+
+            "No tienes que resolver toda tu vida hoy, mi niña. Un día a la vez, ¿sí? Por ahora, haz lo que puedas y trátate con cariño. Lo demás puede esperar un poquito. ♡",
+
+            "Aunque hoy las cosas parezcan demasiado, eso no significa que siempre se van a sentir así. No tienes que encontrar todas las respuestas ahorita; puedes ir pasito a pasito.",
+
+            "Ojalá pudieras verte como yo te veo y recordar que no tienes que ser fuerte a cada segundo. También mereces que te cuiden, que te escuchen y que te den un poquito de paz.",
+
+            "Date permiso de parar un poquito, mi niña. Descansar no es fallar, llorar no te hace débil y pedir ayuda no te hace menos capaz. No tienes que cargar con todo tú solita. ♡"
         ]
     },
 
     dudas: {
-        heading: "SI DUDÁS DE VOS ♡",
+        heading: "SI DUDAS DE TI ♡",
         texts: [
-            "Si algún día dudás de vos, ojalá pudieras mirarte a través de mis ojos, porque yo veo muchísimas cosas bonitas en vos, incluso esas que a veces te cuesta reconocer.",
-            "Sos capaz de más cosas de las que imaginás, incluso cuando vos misma no lo creás. No necesitás tenerlo todo claro para seguir aprendiendo y creciendo.",
-            "No necesitás tener todo resuelto para estar haciendo las cosas bien. A veces avanzar también significa descansar, volver a intentarlo o pedir que alguien te acompañe.",
-            "Equivocarte no te hace menos capaz, mi niña. Todos tenemos cosas que aprender y eso no cambia lo valiosa que sos ni todo lo que podés llegar a hacer.",
-            "Ojalá nunca dejés que un mal día te haga dudar de todo lo bonito que hay en vos. Un momento difícil no borra tus esfuerzos, tus logros ni la persona increíble que sos. ♡"
+            "Si algún día dudas de ti, ojalá pudieras mirarte a través de mis ojos, porque yo veo muchísimas cosas bonitas en ti, incluso esas que a veces te cuesta reconocer.",
+
+            "Eres capaz de más cosas de las que imaginas, incluso cuando tú misma no lo creas. No necesitas tenerlo todo claro para seguir aprendiendo y creciendo.",
+
+            "No necesitas tener todo resuelto para estar haciendo las cosas bien. A veces avanzar también significa descansar, volver a intentarlo o pedir que alguien te acompañe.",
+
+            "Equivocarte no te hace menos capaz, mi niña. Todos tenemos cosas que aprender y eso no cambia lo valiosa que eres ni todo lo que puedes llegar a hacer.",
+
+            "Ojalá nunca dejes que un mal día te haga dudar de todo lo bonito que hay en ti. Un momento difícil no borra tus esfuerzos, tus logros ni la persona increíble que eres. ♡"
         ]
     },
 
     valor: {
-        heading: "SI OLVIDÁS LO QUE VALÉS ♡",
+        heading: "SI OLVIDAS LO QUE VALES ♡",
         texts: [
-            "Nunca olvidés el inmenso valor que tenés, incluso en esos días en los que te cueste reconocerlo. Seguís siendo vos, una niña increíble, también cuando no te sentís en tu mejor momento.",
-            "No tenés que demostrarle nada a nadie para merecer cariño, respeto y cosas bonitas. Merecés que te traten bien simplemente porque sos una persona que vale muchísimo.",
-            "Hay cosas de vos que quizá todavía no lográs ver, pero eso no significa que no estén ahí. Tu corazón, tu forma de sentir y todas esas pequeñas cosas tuyas tienen muchísimo valor.",
-            "Sos mucho más que tus errores, tus inseguridades y esos días en los que no te sentís suficiente. No te definás por un momento complicado ni por una opinión que te hizo daño.",
-            "No dejés que la forma en la que alguien te trate te haga olvidar todo lo que valés. Merecés cariño sincero, respeto y personas con quienes podás sentirte segura siendo vos misma. ♡"
+            "Nunca olvides el inmenso valor que tienes, incluso en esos días en los que te cueste reconocerlo. Sigues siendo tú, una niña increíble, también cuando no te sientes en tu mejor momento.",
+
+            "No tienes que demostrarle nada a nadie para merecer cariño, respeto y cosas bonitas. Mereces que te traten bien simplemente porque eres una persona que vale muchísimo.",
+
+            "Hay cosas de ti que quizá todavía no logras ver, pero eso no significa que no estén ahí. Tu corazón, tu forma de sentir y todas esas pequeñas cosas tuyas tienen muchísimo valor.",
+
+            "Eres mucho más que tus errores, tus inseguridades y esos días en los que no te sientes suficiente. No te definas por un momento complicado ni por una opinión que te hizo daño.",
+
+            "No dejes que la forma en la que alguien te trate te haga olvidar todo lo que vales. Mereces cariño sincero, respeto y personas con quienes puedas sentirte segura siendo tú misma. ♡"
         ]
     },
 
     sola: {
-        heading: "SI TE SENTÍS SOLITA ♡",
+        heading: "SI TE SIENTES SOLITA ♡",
         texts: [
-            "Aunque a veces sintás que nadie te entiende, tus sentimientos importan y merecen ser escuchados. No tenés que encontrar las palabras perfectas para explicar lo que te pasa.",
-            "Si hoy necesitás que alguien te escuche, no tenés que fingir que todo está bien. Podés decir que estás cansada, que algo te duele o que simplemente necesitás compañía.",
-            "Ojalá recordés que no tenés que pasar por todos tus días difíciles sin compañía. Apoyarte en alguien de confianza también es una forma de cuidarte.",
-            "Si hoy no tenés ganas de hablar mucho, está bien. No tenés que entretener a nadie ni aparentar estar feliz. Merecés espacios donde podás ser vos, incluso en silencio.",
-            "Y si hoy el día se siente un poquito más solitario, espero que estas palabras te hagan sentir acompañada. Deseo que encontrés un ratito de tranquilidad y recordés que merecés mucho cariño. ♡"
+            "Aunque a veces sientas que nadie te entiende, tus sentimientos importan y merecen ser escuchados. No tienes que encontrar las palabras perfectas para explicar lo que te pasa.",
+
+            "Si hoy necesitas que alguien te escuche, no tienes que fingir que todo está bien. Puedes decir que estás cansada, que algo te duele o que simplemente necesitas compañía.",
+
+            "Ojalá recuerdes que no tienes que pasar por todos tus días difíciles sin compañía. Apoyarte en alguien de confianza también es una forma de cuidarte.",
+
+            "Si hoy no tienes ganas de hablar mucho, está bien. No tienes que entretener a nadie ni aparentar estar feliz. Mereces espacios donde puedas ser tú, incluso en silencio.",
+
+            "Y si hoy el día se siente un poquito más solitario, espero que estas palabras te hagan sentir acompañada. Deseo que encuentres un ratito de tranquilidad y recuerdes que mereces mucho cariño. ♡"
         ]
     },
 
     siento: {
         heading: "LO QUE SIENTO ♡",
         texts: [
-            "Thaly, quiero que nunca olvidés la niña tan increíble que sos. A veces siento que ni vos misma te das cuenta de lo bonita que es tu forma de ser, de todo lo que llevás dentro y de lo mucho que valés. Tu corazón vale muchísimo más de lo que imaginás y ojalá pudieras verlo aunque fuera por un ratito como yo lo veo. No tenés que ser perfecta para ser alguien maravillosa, porque hay muchísimas cosas bonitas en vos que no cambiaría por nada. ♡",
+            "Thaly, quiero que nunca olvides la niña tan increíble que eres. A veces siento que ni tú misma te das cuenta de lo bonita que es tu forma de ser, de todo lo que llevas dentro y de lo mucho que vales. Tu corazón vale muchísimo más de lo que imaginas y ojalá pudieras verlo aunque fuera por un ratito como yo lo veo. No tienes que ser perfecta para ser alguien maravillosa, porque hay muchísimas cosas bonitas en ti que no cambiaría por nada. ♡",
 
-            "¿Sabés algo que me encanta de vos? Tu sonrisa. No sé si te das cuenta, pero tenés esa manera tan tuya de hacer que las cosas se sientan más bonitas. Tu sonrisa ilumina mucho más de lo que imaginás y me gustaría que nunca sintieras que tenés que esconderla. Quiero verte feliz, haciendo las cosas que te gustan, riéndote por cualquier tontería y siendo vos misma. Sos hermosa, mi niña, pero hay algo todavía más bonito en vos: todo eso que llevás en el corazón. ♡",
+            "¿Sabes algo que me encanta de ti? Tu sonrisa. No sé si te das cuenta, pero tienes esa manera tan tuya de hacer que las cosas se sientan más bonitas. Tu sonrisa ilumina mucho más de lo que imaginas y me gustaría que nunca sintieras que tienes que esconderla. Quiero verte feliz, haciendo las cosas que te gustan, riéndote por cualquier tontería y siendo tú misma. Eres hermosa, mi niña, pero hay algo todavía más bonito en ti: todo eso que llevas en el corazón. ♡",
 
-            "Quiero que sepás que no solamente quiero estar cuando estés feliz y todo te salga bien. También quiero estar cuando estés estresada, cuando tengás un mal rato, cuando tu humor cambie de repente o cuando simplemente no tengás ganas de hablar con nadie. No espero que estés bien todo el tiempo ni que escondás lo que sentís para que todo sea más fácil. Quiero aprender a entenderte, escucharte y acompañarte. Tus días difíciles no hacen que valgas menos ni que merezcás menos cariño. ♡",
+            "Quiero que sepas que no solamente quiero estar cuando estés feliz y todo te salga bien. También quiero estar cuando estés estresada, cuando tengas un mal rato, cuando tu humor cambie de repente o cuando simplemente no tengas ganas de hablar con nadie. No espero que estés bien todo el tiempo ni que escondas lo que sientes para que todo sea más fácil. Quiero aprender a entenderte, escucharte y acompañarte. Tus días difíciles no hacen que valgas menos ni que merezcas menos cariño. ♡",
 
-            "Si algún día sentís que todo se te viene encima, quiero ser alguien con quien podás hablar sin miedo a que te juzguen. Si hay un problema, quiero escucharte y buscar una solución con vos, aunque tengamos que pensar las cosas muchas veces. Y si no existe una solución inmediata, por lo menos quiero acompañarte mientras encontramos la manera de seguir. No siempre voy a tener las palabras perfectas, pero sí quiero esforzarme por entenderte y que no sintás que tenés que resolverlo todo sola. ♡",
+            "Si algún día sientes que todo se te viene encima, quiero ser alguien con quien puedas hablar sin miedo a que te juzguen. Si hay un problema, quiero escucharte y buscar una solución contigo, aunque tengamos que pensar las cosas muchas veces. Y si no existe una solución inmediata, por lo menos quiero acompañarte mientras encontramos la manera de seguir. No siempre voy a tener las palabras perfectas, pero sí quiero esforzarme por entenderte y que no sientas que tienes que resolverlo todo sola. ♡",
 
-            "Mi niña, para mí no tenés que convertirte en alguien diferente para ser suficiente. No tenés que esconder tus inseguridades, tus lágrimas, tus días sensibles ni esas partes de vos que a veces te cuesta aceptar. Quiero conocerte de verdad, con tus días bonitos y también con los que cuestan un poquito más. Si alguna vez dudás de vos, quiero recordarte todas las veces que sea necesario lo increíble que sos. Sos hermosa tal y como sos, Thaly, y espero que algún día podás mirarte con la misma ternura con la que yo te miro. ♡"
+            "Mi niña, para mí no tienes que convertirte en alguien diferente para ser suficiente. No tienes que esconder tus inseguridades, tus lágrimas, tus días sensibles ni esas partes de ti que a veces te cuesta aceptar. Quiero conocerte de verdad, con tus días bonitos y también con los que cuestan un poquito más. Si alguna vez dudas de ti, quiero recordarte todas las veces que sea necesario lo increíble que eres. Eres hermosa tal y como eres, Thaly, y espero que algún día puedas mirarte con la misma ternura con la que yo te miro. ♡"
         ]
     }
 
@@ -916,6 +1168,60 @@ nextMessage.addEventListener("click", () => {
         (currentMessageIndex + 1) % total;
 
     showReminderMessage();
+
+});
+
+
+/* =====================================
+   ABRIR Y CERRAR EL APARTADO DE SUS SUEÑOS
+===================================== */
+
+const openDreams = document.getElementById("openDreams");
+const dreamsPanel = document.getElementById("dreamsPanel");
+const closeDreams = document.getElementById("closeDreams");
+
+function toggleDreams(isOpen) {
+
+    dreamsPanel.classList.toggle("visible", isOpen);
+
+    openDreams.setAttribute(
+        "aria-expanded",
+        String(isOpen)
+    );
+
+    openDreams.innerHTML = isOpen
+        ? '<span class="dreams-label">TU CARTITA ESPECIAL</span><strong>Para todos tus sueños, Thaly ♡</strong>'
+        : '<span class="dreams-label">UNA CARTITA SOLO PARA TI</span><strong>Para todos tus sueños, Thaly ♡</strong>';
+
+    if (isOpen) {
+
+        dreamsPanel.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
+    } else {
+
+        openDreams.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest"
+        });
+
+    }
+
+}
+
+openDreams.addEventListener("click", () => {
+
+    toggleDreams(
+        !dreamsPanel.classList.contains("visible")
+    );
+
+});
+
+closeDreams.addEventListener("click", () => {
+
+    toggleDreams(false);
 
 });
 
