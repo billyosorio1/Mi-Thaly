@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -326,6 +327,99 @@ h1 {
     white-space: nowrap;
 }
 
+/* APARTADO: UNAS PALABRAS MÍAS */
+
+.words-wrap {
+    max-width: 490px;
+    margin: 28px auto 12px;
+}
+
+.words-card {
+    position: relative;
+    overflow: hidden;
+    padding: 30px 22px 25px;
+    border: 1px solid rgba(222, 195, 207, .8);
+    border-radius: 28px;
+
+    background:
+        radial-gradient(
+            ellipse at 8% 8%,
+            rgba(255,255,255,.98) 0%,
+            rgba(255,255,255,0) 34%
+        ),
+        radial-gradient(
+            ellipse at 95% 92%,
+            rgba(242,220,229,.78) 0%,
+            rgba(242,220,229,0) 38%
+        ),
+        linear-gradient(
+            145deg,
+            #fffdfd 0%,
+            #fff7fa 52%,
+            #f9edf2 100%
+        );
+
+    box-shadow: 0 15px 38px rgba(188, 151, 165, .16);
+    text-align: center;
+}
+
+.words-decoration {
+    position: absolute;
+    top: 17px;
+    right: 18px;
+    color: #c6aab5;
+    font-size: 23px;
+    animation: twinkle 3s ease-in-out infinite;
+}
+
+.words-label {
+    color: #a58a95;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    margin-bottom: 11px;
+}
+
+.words-title {
+    color: #705a63;
+    font-family: "Yu Mincho", "Hiragino Mincho ProN",
+                 "Noto Serif JP", serif;
+    font-size: clamp(1.45rem, 5.5vw, 1.9rem);
+    font-weight: 400;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.words-heart {
+    display: block;
+    color: #c9aab7;
+    font-size: 22px;
+    margin-bottom: 17px;
+}
+
+.words-description {
+    max-width: 350px;
+    margin: 0 auto 22px;
+    color: #62565a;
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+#palabrasAudio {
+    display: block;
+    width: 100%;
+    max-width: 390px;
+    margin: 0 auto;
+    border-radius: 30px;
+}
+
+.words-footer {
+    margin-top: 20px;
+    color: #a58a95;
+    font-size: 12px;
+    letter-spacing: .5px;
+    line-height: 1.8;
+}
+
 /* APARTADO ESPECIAL: SUEÑOS */
 
 .dreams-wrap {
@@ -594,6 +688,19 @@ h1 {
         font-size: 14px;
         line-height: 1.95;
     }
+
+    .words-card {
+        padding: 27px 18px 24px;
+    }
+
+    .words-description {
+        font-size: 13px;
+        line-height: 1.9;
+    }
+
+    .words-title {
+        font-size: 1.5rem;
+    }
 }
 
 /* ACCESIBILIDAD */
@@ -635,7 +742,7 @@ h1 {
     <span class="welcome-decoration decoration-three">♡</span>
     <span class="welcome-decoration decoration-four">✧</span>
 
-    <div class="welcome-heart">♡</div>
+    <div class="welcome-heart"></div>
 
     <p class="welcome-subtitle">
         UN PEQUEÑO DETALLE PARA TI
@@ -652,7 +759,7 @@ h1 {
     </button>
 
     <p class="welcome-footer">
-        Preparé esto pensando en ti 👉🏽👈🏽
+        Preparé esto con cariño 👉🏽👈🏽
     </p>
 </section>
 
@@ -689,7 +796,6 @@ h1 {
 
     <div class="top-heart">
         <span class="sparkle">✧</span>
-        ♡
         <span class="sparkle">✧</span>
     </div>
 
@@ -728,59 +834,63 @@ h1 {
     <section class="letter" id="letter" aria-live="polite">
 
         <p>
-            Mi Thaly, si llegaste aquí porque hoy te sientes triste,
-            cansada o porque las cosas no están saliendo como
-            quisieras, quiero que te tomes un momentito para respirar.
+            Mi Thaly, si llegaste aquí porque hoy te sentís triste,
+            cansada o porque las cosas no están saliendo como quisieras,
+            quiero que te tomés un momentito para respirar, va?
         </p>
 
         <p>
-            No tienes que poder con todo siempre. Está bien tener
-            días difíciles, llorar, descansar o no saber qué hacer.
-            Eso no te hace menos fuerte; eres humana y también
-            mereces tratarte con cariño.
+            Sé que hay días en los que todo se siente demasiado, que te
+            cansás, que te estresás y que a veces ni vos misma sabés qué
+            hacer con todo lo que sentís. Y está bien, mi niña, no tenés
+            que poder con todo siempre.
         </p>
 
         <p class="emphasis">
-            Quiero que recuerdes que eres fuerte y valiente,
-            incluso cuando tú no lo sientas así.
-            Tu valor no desaparece en los días en los que
-            te cuesta más.
+            Quiero que recordés que sos una niña increíble, que valés muchísimo
+            y que no importa qué tan difícil sea un día, eso nunca va a cambiar.
+            A veces quisiera que pudieras verte con mis ojos, para que entendieras
+            lo bonita que sos, no solo por fuera, sino por todo lo que llevás dentro.
+            Tu corazón, tu forma de ser, todo eso que te hace ser vos.
         </p>
 
         <p>
-            Vales muchísimo, Thaly. No por lo que haces por los
-            demás, por lo bien que te salgan las cosas ni por
-            tener siempre una sonrisa. Vales por quien eres,
-            así, tal y como eres. Ojalá pudieras verte con un
-            poquito de todo lo bonito que yo veo en ti. ♡
+            Y de verdad, Thaly, no sabés cuánto me importa que estés bien. Me duele
+            saber que hay cosas que te hacen sentir mal y no poder hacer mucho por la
+            distancia, pero quiero que sepás que aquí estoy. Si querés hablar,
+            te escucho; si querés distraerte, también. Y si no sabés ni qué decirme,
+            no pasa nada, mi niña. ♡
         </p>
 
         <p>
-            No sé si hoy puedo arreglar lo que te preocupa,
-            pero sí quiero que sepas que no tienes que fingir
-            conmigo. Si quieres hablar, te escucho; si necesitas
-            distraerte o simplemente compañía, también puedes
-            contar conmigo.
+            Sé que estoy muy lejos de ser el hombre perfecto, que todavía tengo muchas
+            cosas que mejorar y que me falta muchísimo por aprender, pero si hay algo que
+            tengo claro es que quiero verte bien. Haría lo que estuviera en mis manos por
+            verte feliz, por verte cumplir tus sueños y por acompañarte también en esos
+            días en los que las cosas no son tan bonitas.
         </p>
 
         <p>
-            Mientras me lo permitas, voy a tratar de estar
-            para ti, en los días bonitos y también en los que
-            se sienten cuesta arriba. Te quiero muchísimo y
-            deseo de verdad que, poquito a poquito, las cosas
-            se vayan sintiendo mejor.
+            Quiero que sepás que mientras vos me lo permitás, voy a estar para vos.
+            No importa si tenés un día bonito o uno de esos en los que sentís que ya no podés más,
+            quiero que siempre tengás a alguien con quien hablar, alguien que te escuche
+            y que te recuerde cuánto valés.
         </p>
 
         <p>
-            Mereces cosas bonitas, mereces que te quieran bien
-            y mereces darte la misma paciencia que tantas veces
-            tienes con los demás.
+            Y si algún día necesitás un pedacito de mi corazón para sentirte mejor, te lo
+            daría sin pensarlo. Porque vos valés la pena, Thaly, muchísimo. Y aunque a veces
+            no sepa cómo ayudarte o qué decirte, nunca va a cambiar lo mucho que te quiero
+            ni las ganas que tengo de verte bien.
         </p>
 
         <div class="signature">
-            Respira, mi Thaly. Un día difícil no define toda tu historia.
+            No sé qué haría sin vos, mi niña. Sos alguien demasiado importante para mí,
+            y de verdad deseo que la vida te regale muchísimas cosas bonitas, porque te las merecés.
+
             <br>
-            Te quiero mucho. ♡
+            Respirá un poquito, mi Thaly. No tenés que resolver todo hoy, va?
+            Te quiero muchísimo y aquí voy a estar, mientras me lo permitás. ♡
         </div>
 
     </section>
@@ -792,7 +902,7 @@ h1 {
     </div>
 
     <p class="small">
-        Si necesitas otro recordatorio, elige el que más te haga falta hoy.
+        Si necesitas otro recordatorio, elige el que más te haga falta hoy :)
     </p>
 
     <div class="reminders">
@@ -851,6 +961,61 @@ h1 {
             </button>
 
         </div>
+    </section>
+
+    <!-- NUEVO APARTADO: UNAS PALABRAS MÍAS -->
+
+    <div class="divider">
+        <span class="sparkle">♡</span>
+    </div>
+
+    <p class="small">
+        Hay algo que quiero que escuches de mí. ♡
+    </p>
+
+    <section class="words-wrap">
+
+        <div class="words-card">
+
+            <span class="words-decoration">✧</span>
+
+            <p class="words-label">
+                UN MENSAJITO PARA TI
+            </p>
+
+            <h2 class="words-title">
+                UNAS PALABRAS MÍAS
+            </h2>
+
+            <span class="words-heart">
+                ♡
+            </span>
+
+            <p class="words-description">
+                A veces hay cosas que quiero decirte
+                y siento que es más bonito que las escuches
+                directamente de mí.
+            </p>
+
+            <audio
+                id="palabrasAudio"
+                controls
+                preload="auto"
+            >
+                <source
+                    src="palabras.mp3"
+                    type="audio/mpeg"
+                >
+
+                Tu navegador no admite la reproducción de audio.
+            </audio>
+
+            <p class="words-footer">
+                Escúchalo cuando quieras, mi niña. ♡
+            </p>
+
+        </div>
+
     </section>
 
     <!-- APARTADO ESPECIAL PARA SUS SUEÑOS -->
@@ -929,7 +1094,7 @@ Soy tu fan número 1, mi Thaly, y siempre voy a querer verte salir adelante, apo
     </p>
 
     <p class="small">
-        Con mucho cariño, de mí para ti ♡
+        Con mucho cariño para ti de tú ♡
     </p>
 
 </main>
@@ -944,12 +1109,57 @@ const welcomeScreen = document.getElementById("welcomeScreen");
 const enterButton = document.getElementById("enterButton");
 const musica = document.getElementById("musicaFondo");
 
+
+/* =====================================
+   AUDIO: UNAS PALABRAS MÍAS
+   CONTROL AUTOMÁTICO DEL VOLUMEN
+===================================== */
+
+const palabrasAudio = document.getElementById("palabrasAudio");
+
+// Volumen normal de la música de fondo.
+const volumenNormal = 0.45;
+
+// Volumen de la música mientras se escucha el audio.
+const volumenReducido = 0.10;
+
+// Bajar el volumen de la música sin detenerla.
+function bajarMusica() {
+    musica.volume = volumenReducido;
+}
+
+// Recuperar el volumen normal de la música.
+function recuperarMusica() {
+    musica.volume = volumenNormal;
+}
+
+// Cuando comienza el audio, bajar la música.
+palabrasAudio.addEventListener("play", () => {
+    bajarMusica();
+});
+
+// Cuando el audio termina, recuperar la música.
+palabrasAudio.addEventListener("ended", () => {
+    recuperarMusica();
+});
+
+// Si Thaly pausa el audio, recuperar la música.
+palabrasAudio.addEventListener("pause", () => {
+    recuperarMusica();
+});
+
+// Si ocurre un error con el audio, recuperar la música.
+palabrasAudio.addEventListener("error", () => {
+    recuperarMusica();
+});
+
+
 enterButton.addEventListener("click", async () => {
 
     enterButton.disabled = true;
 
     try {
-        musica.volume = 0.45;
+        musica.volume = volumenNormal;
         await musica.play();
     } catch (error) {
 
