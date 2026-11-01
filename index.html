@@ -1119,117 +1119,193 @@ const welcomeScreen = document.getElementById("welcomeScreen");
 const enterButton = document.getElementById("enterButton");
 const musica = document.getElementById("musicaFondo");
 
-
 /* =====================================
-   AUDIO: UNAS PALABRAS MÍAS
-   FADE OUT Y FADE IN DE LA MÚSICA
+   AUDIO: FADE OUT Y FADE IN
+   USANDO WEB AUDIO API
 ===================================== */
 
 const palabrasAudio = document.getElementById("palabrasAudio");
 
-// Volumen normal de la música de fondo.
 const volumenNormal = 0.45;
-
-// Volumen casi imperceptible mientras se escucha la voz.
 const volumenReducido = 0.01;
+const duracionFade = 1.8;
 
-// Duración de cada transición de volumen.
-const duracionFade = 1800;
+let audioContext = null;
+let musicaGain = null;
+let musicaSource = null;
+let audioWebDisponible = false;
+let fadeInterval = null;
 
-// Control del intervalo para evitar varios fades simultáneos.
-let fadeInterval;
+/*
+   Preparamos el audio mediante Web Audio API.
+   Esto permite controlar las transiciones de volumen
+   de forma más fluida en Chrome y Safari.
+*/
 
-// Función para hacer fade in o fade out.
-function hacerFade(audio, volumenInicial, volumenFinal, duracion) {
+function prepararAudio() {
 
-    clearInterval(fadeInterval);
+    if (audioContext) {
+        return;
+    }
 
-    const pasos = 30;
-    const intervalo = duracion / pasos;
-    const diferencia = volumenFinal - volumenInicial;
+    const AudioContextClass =
+        window.AudioContext || window.webkitAudioContext;
 
-    let paso = 0;
+    if (!AudioContextClass) {
+        musica.volume = volumenNormal;
+        return;
+    }
 
-    audio.volume = volumenInicial;
+    try {
 
-    fadeInterval = setInterval(() => {
+        audioContext = new AudioContextClass();
 
-        paso++;
+        musicaGain = audioContext.createGain();
 
-        const progreso = paso / pasos;
+        musicaSource =
+            audioContext.createMediaElementSource(musica);
 
-        audio.volume = Math.max(
-            0,
-            Math.min(
-                1,
-                volumenInicial + diferencia * progreso
-            )
+        musicaGain.gain.value = volumenNormal;
+
+        musicaSource.connect(musicaGain);
+
+        musicaGain.connect(audioContext.destination);
+
+        audioWebDisponible = true;
+
+    } catch (error) {
+
+        console.warn(
+            "Web Audio API no está disponible. Se utilizará el control de volumen normal.",
+            error
         );
 
-        if (paso >= pasos) {
+        audioWebDisponible = false;
 
-            clearInterval(fadeInterval);
+        audioContext = null;
+        musicaGain = null;
+        musicaSource = null;
 
-            audio.volume = volumenFinal;
+        musica.volume = volumenNormal;
 
-        }
-
-    }, intervalo);
+    }
 
 }
 
-// Cuando comienza la voz, la música baja suavemente.
-palabrasAudio.addEventListener("play", () => {
+/*
+   Cambia el volumen gradualmente.
+   Si Web Audio API está disponible, utiliza GainNode.
+   Si no, utiliza el volumen tradicional del elemento.
+*/
 
-    hacerFade(
-        musica,
-        musica.volume,
-        volumenReducido,
-        duracionFade
-    );
+function hacerFade(volumenFinal) {
+
+    clearInterval(fadeInterval);
+
+    if (audioWebDisponible && audioContext && musicaGain) {
+
+        const ahora = audioContext.currentTime;
+        const ganancia = musicaGain.gain;
+
+        const volumenActual = ganancia.value;
+
+        ganancia.cancelScheduledValues(ahora);
+
+        ganancia.setValueAtTime(
+            volumenActual,
+            ahora
+        );
+
+        ganancia.linearRampToValueAtTime(
+            volumenFinal,
+            ahora + duracionFade
+        );
+
+    } else {
+
+        const volumenInicial = musica.volume;
+        const diferencia = volumenFinal - volumenInicial;
+
+        const pasos = 30;
+        const intervalo = (duracionFade * 1000) / pasos;
+
+        let paso = 0;
+
+        fadeInterval = setInterval(() => {
+
+            paso++;
+
+            const progreso = paso / pasos;
+
+            musica.volume = Math.max(
+                0,
+                Math.min(
+                    1,
+                    volumenInicial + diferencia * progreso
+                )
+            );
+
+            if (paso >= pasos) {
+
+                clearInterval(fadeInterval);
+
+                musica.volume = volumenFinal;
+
+            }
+
+        }, intervalo);
+
+    }
+
+}
+
+/* Cuando comienza la voz, la música baja suavemente. */
+
+palabrasAudio.addEventListener("play", async () => {
+
+    prepararAudio();
+
+    if (audioContext && audioContext.state === "suspended") {
+
+        try {
+            await audioContext.resume();
+        } catch (error) {
+            console.warn("No se pudo activar el contexto de audio.", error);
+        }
+
+    }
+
+    hacerFade(volumenReducido);
 
 });
 
-// Cuando termina la voz, la música vuelve a subir suavemente.
+/* Cuando termina la voz, la música vuelve a subir. */
+
 palabrasAudio.addEventListener("ended", () => {
 
-    hacerFade(
-        musica,
-        musica.volume,
-        volumenNormal,
-        duracionFade
-    );
+    hacerFade(volumenNormal);
 
 });
 
-// Si se pausa la voz, la música vuelve a subir suavemente.
+/* Si se pausa la voz, la música vuelve a subir. */
+
 palabrasAudio.addEventListener("pause", () => {
 
     if (!palabrasAudio.ended) {
 
-        hacerFade(
-            musica,
-            musica.volume,
-            volumenNormal,
-            duracionFade
-        );
+        hacerFade(volumenNormal);
 
     }
 
 });
 
-// Si ocurre un error con el audio, recuperar la música.
+/* Si ocurre un error con la voz, recuperar la música. */
+
 palabrasAudio.addEventListener("error", () => {
 
-    hacerFade(
-        musica,
-        musica.volume,
-        volumenNormal,
-        duracionFade
-    );
+    hacerFade(volumenNormal);
 
 });
-
 
 /* =====================================
    BOTÓN DE ENTRADA
@@ -1241,7 +1317,17 @@ enterButton.addEventListener("click", async () => {
 
     try {
 
-        musica.volume = volumenNormal;
+        prepararAudio();
+
+        if (audioContext && audioContext.state === "suspended") {
+            await audioContext.resume();
+        }
+
+        if (audioWebDisponible) {
+            musica.volume = 1;
+        } else {
+            musica.volume = volumenNormal;
+        }
 
         await musica.play();
 
@@ -1268,7 +1354,6 @@ enterButton.addEventListener("click", async () => {
     }, 850);
 
 });
-
 
 /* =====================================
    ABRIR Y CERRAR LA CARTA
@@ -1301,7 +1386,6 @@ openButton.addEventListener("click", () => {
 
 });
 
-
 /* =====================================
    RECORDATORIOS: 5 MENSAJES POR BOTÓN
 ===================================== */
@@ -1311,80 +1395,79 @@ const reminderMessages = {
     peso: {
         heading: "SI TODO PESA MUCHO ♡",
         texts: [
-            "Thaly, no tienes que poder con todo al mismo tiempo. También está bien descansar, respirar y darte un ratito para ti. No tienes que demostrarle a nadie que puedes con todo.",
+            "Mi Nathaly sé que hay días en los que todo parece juntarse y hasta las cosas más pequeñas se sienten difíciles, respira un poquito, descansa si lo necesitas y recuerda que no tienes que poder con todo tu solita siempre, recuerda que estoy acá para apoyarte en lo que sea.",
 
-            "No tienes que resolver toda tu vida hoy, mi niña. Un día a la vez, ¿sí? Por ahora, haz lo que puedas y trátate con cariño. Lo demás puede esperar un poquito. ♡",
+            "Oye, te quiero mucho, y no puedo quitarte el dolor, pero aquí estoy, te acompaño, va? ♡",
 
-            "Aunque hoy las cosas parezcan demasiado, eso no significa que siempre se van a sentir así. No tienes que encontrar todas las respuestas ahorita; puedes ir pasito a pasito.",
+            "Si alguna vez te sientes triste no dudes en decírmelo, porque en verdad me importas más de lo que crees..",
 
-            "Ojalá pudieras verte como yo te veo y recordar que no tienes que ser fuerte a cada segundo. También mereces que te cuiden, que te escuchen y que te den un poquito de paz.",
+            "Échale ganas hermosa, sé que andas cansada, estresada, con sueño, pero son momentos, recuerda que soy tu fan número 1 y tú puedes con todo!!!.",
 
-            "Date permiso de parar un poquito, mi niña. Descansar no es fallar, llorar no te hace débil y pedir ayuda no te hace menos capaz. No tienes que cargar con todo tú solita. ♡"
+            "Si pudiera quitarte el dolorcito que cargas dentro de ti y ponerlo en mí, lo haría una y mil veces, siempre voy a querer cuidarte y protegerte, abrazar cada una de tus cicatrices y heridas, y llenarte de todo el amor que te mereces. ♡"
         ]
     },
 
     dudas: {
         heading: "SI DUDAS DE TI ♡",
         texts: [
-            "Si algún día dudas de ti, ojalá pudieras mirarte a través de mis ojos, porque yo veo muchísimas cosas bonitas en ti, incluso esas que a veces te cuesta reconocer.",
+            "No te falta nada, eres una gran mujer, un amor de persona, eres trabajadora, estás guapísima, te esfuerzas todos los días y tu corazón es noble, no dudes de ti.",
 
-            "Eres capaz de más cosas de las que imaginas, incluso cuando tú misma no lo creas. No necesitas tenerlo todo claro para seguir aprendiendo y creciendo.",
+            "Me siento muy orgulloso de la gran mujer que eres, te esfuerzas mucho y aunque no todo sea sencillo no te rindes, por eso siempre estaré para animarte y apoyarte.",
 
-            "No necesitas tener todo resuelto para estar haciendo las cosas bien. A veces avanzar también significa descansar, volver a intentarlo o pedir que alguien te acompañe.",
+            "Sé que las cosas a veces no van del todo bien y no se te da lo que querés, pero estoy orgulloso y feliz por lo que haces día a día, eres una mujer fuerte y guapísima 🫦, nunca lo olvides.",
 
-            "Equivocarte no te hace menos capaz, mi niña. Todos tenemos cosas que aprender y eso no cambia lo valiosa que eres ni todo lo que puedes llegar a hacer.",
+            "Recuerda que cada día estoy más orgulloso de ti, de la persona que eres y del esfuerzo enorme que haces para salir adelante, nunca pienses que no eres suficiente para nadie porque yo siempre estaré contigo, intentando que el brillo de tus ojos no se apague.",
 
-            "Ojalá nunca dejes que un mal día te haga dudar de todo lo bonito que hay en ti. Un momento difícil no borra tus esfuerzos, tus logros ni la persona increíble que eres. ♡"
+            "Quiero verte cumplir cada uno de tus sueños, superar todas esas barreras a las que te enfrentas y llegar tan lejos como te lo propongas. Quiero verte teniendo éxito en todo aquello que te hace feliz, y quiero que nunca olvides que eres capaz de lograr muchísimas cosas. Soy tu fan número 1, Thaly, y quiero estar ahí para aplaudirte en cada logro, por pequeño que sea, y acompañarte en cada paso del camino, mientras me lo permitas. ♡"
         ]
     },
 
     valor: {
         heading: "SI OLVIDAS LO QUE VALES ♡",
         texts: [
-            "Nunca olvides el inmenso valor que tienes, incluso en esos días en los que te cueste reconocerlo. Sigues siendo tú, una niña increíble, también cuando no te sientes en tu mejor momento.",
+            "Yo sé que mucha gente no valora todo el esfuerzo que haces día a día para salir adelante, pero déjame decirte que yo soy la excepción, valoro cada pequeño esfuerzo que haces desde que te levantas hasta que te vas a dormir, por eso es que te quiero tanto, así que nunca dudes de lo muy orgulloso que estoy de ti :)",
 
-            "No tienes que demostrarle nada a nadie para merecer cariño, respeto y cosas bonitas. Mereces que te traten bien simplemente porque eres una persona que vale muchísimo.",
+            "Eres una niña increíble, hermosa por dentro y por fuera, tu sonrisa ilumina mis días y tu corazón vale más de lo que imaginas, nunca dudes de lo mucho que vales, porque a través de mis ojos siempre serás alguien única, especial y maravillosa.",
 
-            "Hay cosas de ti que quizá todavía no logras ver, pero eso no significa que no estén ahí. Tu corazón, tu forma de sentir y todas esas pequeñas cosas tuyas tienen muchísimo valor.",
+            "No tienes que demostrarle nada a nadie para valer muchísimo, mi niña, eres perfecta tal y como eres 🫶🏽",
 
-            "Eres mucho más que tus errores, tus inseguridades y esos días en los que no te sientes suficiente. No te definas por un momento complicado ni por una opinión que te hizo daño.",
+            "Thaly, nunca olvides que tu valor no depende de qué tan bien te salga algo, de cuánto logres en un día ni de lo que otras personas piensen de ti, sigues siendo esa niña tan especial incluso en tus días menos buenos, y no tienes que ganarte el cariño de nadie siendo perfecta.",
 
-            "No dejes que la forma en la que alguien te trate te haga olvidar todo lo que vales. Mereces cariño sincero, respeto y personas con quienes puedas sentirte segura siendo tú misma. ♡"
+            "Mi Nathaly, nunca permitas que un mal día, un error o las palabras de alguien te hagan olvidar la persona tan bonita que eres, eres valiosa por quien eres, incluso en esos días en los que tú misma no logras verlo. ♡"
         ]
     },
 
     sola: {
         heading: "SI TE SIENTES SOLITA ♡",
         texts: [
-            "Aunque a veces sientas que nadie te entiende, tus sentimientos importan y merecen ser escuchados. No tienes que encontrar las palabras perfectas para explicar lo que te pasa.",
+            "Yo solo vengo a recordarte que, si algún día te duele la vida, hablame, quizás no pueda curarte, pero sí acompañarte, no estás solita en esto, avanzamos juntos :)",
 
-            "Si hoy necesitas que alguien te escuche, no tienes que fingir que todo está bien. Puedes decir que estás cansada, que algo te duele o que simplemente necesitas compañía.",
+            "Tranquila tú, no estás solita en esto sabes que me tienes a mi a tu lado y cuando ya no puedas más yo resuelvo va ;)",
 
-            "Ojalá recuerdes que no tienes que pasar por todos tus días difíciles sin compañía. Apoyarte en alguien de confianza también es una forma de cuidarte.",
+            "Siempre voy a querer cuidarte, abrazar tus heridas y recordarte lo increíble que eres",
 
-            "Si hoy no tienes ganas de hablar mucho, está bien. No tienes que entretener a nadie ni aparentar estar feliz. Mereces espacios donde puedas ser tú, incluso en silencio.",
+            "Si de hoy por alguna razón te sentís solita, deja de pensar eso, mira que hay un hombre por ahí que diseñó y creó un sitio web solo para ti para demostrarte que si hay muchas personas que te quieren 🫶🏽",
 
-            "Y si hoy el día se siente un poquito más solitario, espero que estas palabras te hagan sentir acompañada. Deseo que encuentres un ratito de tranquilidad y recuerdes que mereces mucho cariño. ♡"
+            "Me gustaría ser tu superhéroe, no para salvar al mundo, sino para salvarte de todo lo que te hace daño, abrazarte en tus días difíciles y hacer que nunca vuelvas a sentirte sola ❤️"
         ]
     },
 
     siento: {
         heading: "LO QUE SIENTO ♡",
         texts: [
-            "Thaly, quiero que nunca olvides la niña tan increíble que eres. A veces siento que ni tú misma te das cuenta de lo bonita que es tu forma de ser, de todo lo que llevas dentro y de lo mucho que vales. Tu corazón vale muchísimo más de lo que imaginas y ojalá pudieras verlo aunque fuera por un ratito como yo lo veo. No tienes que ser perfecta para ser alguien maravillosa, porque hay muchísimas cosas bonitas en ti que no cambiaría por nada. ♡",
+            "Todavía me queda mucho por mejorar, sí, pero quiero ser la mejor versión de mí para darte todo lo que te mereces 🫶🏽",
 
-            "¿Sabes algo que me encanta de ti? Tu sonrisa. No sé si te das cuenta, pero tienes esa manera tan tuya de hacer que las cosas se sientan más bonitas. Tu sonrisa ilumina mucho más de lo que imaginas y me gustaría que nunca sintieras que tienes que esconderla. Quiero verte feliz, haciendo las cosas que te gustan, riéndote por cualquier tontería y siendo tú misma. Eres hermosa, mi niña, pero hay algo todavía más bonito en ti: todo eso que llevas en el corazón. ♡",
+            "Tranquila, yo te acompaño en tus días malos y soportaré tus cambios de humor, en tus momentos de estrés y cuando tengas ganas de llorar, siempre estaré para hacerte sentir segura, buscaré una solución para todo contigo y quiero que nunca dudes de ti misma, porque para mí eres alguien muy especial tal y lo eres todo 🤍",
 
-            "Quiero que sepas que no solamente quiero estar cuando estés feliz y todo te salga bien. También quiero estar cuando estés estresada, cuando tengas un mal rato, cuando tu humor cambie de repente o cuando simplemente no tengas ganas de hablar con nadie. No espero que estés bien todo el tiempo ni que escondas lo que sientes para que todo sea más fácil. Quiero aprender a entenderte, escucharte y acompañarte. Tus días difíciles no hacen que valgas menos ni que merezcas menos cariño. ♡",
+            "Te voy a cuidar siempre porque alguien como tú se merece todo lo bonito, quiero quedarme contigo no importa qué tan difícil sea :)",
 
-            "Si algún día sientes que todo se te viene encima, quiero ser alguien con quien puedas hablar sin miedo a que te juzguen. Si hay un problema, quiero escucharte y buscar una solución contigo, aunque tengamos que pensar las cosas muchas veces. Y si no existe una solución inmediata, por lo menos quiero acompañarte mientras encontramos la manera de seguir. No siempre voy a tener las palabras perfectas, pero sí quiero esforzarme por entenderte y que no sientas que tienes que resolverlo todo sola. ♡",
+            "No sabes cuánto me duele no poder sanar todo eso que te lastima. Si pudiera quitarte el dolor que cargas en tu corazón y ponerlo en el mío, lo haría una y mil veces. ♡",
 
-            "Mi niña, para mí no tienes que convertirte en alguien diferente para ser suficiente. No tienes que esconder tus inseguridades, tus lágrimas, tus días sensibles ni esas partes de ti que a veces te cuesta aceptar. Quiero conocerte de verdad, con tus días bonitos y también con los que cuestan un poquito más. Si alguna vez dudas de ti, quiero recordarte todas las veces que sea necesario lo increíble que eres. Eres hermosa tal y como eres, Thaly, y espero que algún día puedas mirarte con la misma ternura con la que yo te miro. ♡"
+            "Quiero que sepas que no tienes que estar bien todo el tiempo conmigo, mi niña. No tienes que esconder tus días malos ni fingir una sonrisa cuando no te nace. Quiero conocerte también en esos momentos, escucharte, aprender a entenderte y recordarte cuánto te quiero incluso cuando tú misma estés teniendo un día difícil. ♡"
         ]
     }
 
 };
-
 
 /* =====================================
    MOSTRAR Y CAMBIAR MENSAJES
@@ -1439,7 +1522,6 @@ document.querySelectorAll("[data-section]").forEach(button => {
 
 });
 
-
 /* MENSAJE ANTERIOR */
 
 previousMessage.addEventListener("click", () => {
@@ -1455,7 +1537,6 @@ previousMessage.addEventListener("click", () => {
 
 });
 
-
 /* MENSAJE SIGUIENTE */
 
 nextMessage.addEventListener("click", () => {
@@ -1470,7 +1551,6 @@ nextMessage.addEventListener("click", () => {
     showReminderMessage();
 
 });
-
 
 /* =====================================
    ABRIR Y CERRAR EL APARTADO DE SUS SUEÑOS
